@@ -21,3 +21,19 @@ that would enable changing "Londom" to "London" in the "origin" column in the fi
 Can you please check in the code in a github repository and send us the link to it?
 
 If you have any questions, please send them to us.
+
+## Notes
+To exercise the code, use sbt in the root folder that contains the repository.
+This solution was implemented in Scala and uses Scalatest and sbt project layout.
+It was possible to include alternative 'style' of solution using libraries
+eg Apache Spark Dataframe, or other Scala CSV parser / writer libraries. These
+choices were not made to keep the solution simple and for a more expedient completion.
+
+### Additional information
+The solution should perhaps have 'overwritten' the original CSV file, but this was not 
+done in order that the reviewers could simply check the faulty file against the corrected
+file. 
+The source file and the output file are located relative to the project structure in a 
+src/resources folder. This was, again, to simplify and expedite the solution. The classpath
+could have been searched for the CSV resource, or the location of the data files could be 
+passed into and instance of the application as a parameter. This would be easy to achieve. 

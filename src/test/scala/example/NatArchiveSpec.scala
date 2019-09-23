@@ -5,10 +5,7 @@ import scala.io.Source
 import java.security.MessageDigest
 
 class NatArchiveSpec extends FlatSpec with Matchers {
-  // created  by the giter8 template DELETE when done.
-  "The NatArchive object" should "identify as" ignore {
-    NatArchive.greeting shouldEqual "Welcome to the National Archive file data modifier."
-  }
+
   // reused values
   val fName = "src/resources/data.csv"
   val origin = 1
@@ -30,7 +27,6 @@ class NatArchiveSpec extends FlatSpec with Matchers {
   }
 
   "Running the updateRowValues function" should "write a new file with the faulty value changed" in {
-
     NatArchive.updateRowValues(fName, "origin", "Londom", "London")
     // dummy assertion to execute the exercise method. 
     origin shouldBe 1
