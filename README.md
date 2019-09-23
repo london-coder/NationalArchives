@@ -36,4 +36,4 @@ file.
 The source file and the output file are located relative to the project structure in a 
 src/resources folder. This was, again, to simplify and expedite the solution. The classpath
 could have been searched for the CSV resource, or the location of the data files could be 
-passed into and instance of the application as a parameter. This would be easy to achieve. 
+passed into an instance of the application as a parameter. This would be easy to achieve. 
