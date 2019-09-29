@@ -24,17 +24,16 @@ if(args.length == 4 ) {
 */
   def updateRowValues(csvFileName: String, column: String, oldValue: String, newValue: String): Unit = {
     val source = Source.fromFile(csvFileName, "UTF-8")
-    val outputfName = csvFileName+".modified"
-    val sink = new PrintWriter(new File(outputfName))
-    
     val data = dataReader(source)
+    source.close
     val index = columnIndex(data, column)
     
     val out = iterateOverData (data, index, oldValue, newValue)
-
+    
+    val outputfName = csvFileName+".modified"
+    val sink = new PrintWriter(new File(outputfName))
     dataWriter(sink, out)
 
-    source.close
     sink.flush
     sink.close
     // what should happen here, but is not executed, to maintain visibility of the change, is to 
