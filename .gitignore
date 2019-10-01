@@ -1,3 +1,4 @@
 target/
 *original-data.csv
 src/resources/data.csv.modified
+.scalafmt*

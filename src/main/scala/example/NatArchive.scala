@@ -74,4 +74,15 @@ if(args.length == 4 ) {
     line(index) = correct
     line.toArray
   }
+
+  // case class FileAndHash(f: String, h: String)
+
+  def duplicateFiles(data: List[Array[String]]): Map[String, List[String]] = {
+    val fs = for {
+      line <- data
+    } yield (line(3), line(0))
+
+    fs.groupBy(_._1).view.mapValues(_.map(_._2)).toMap.filter(_._2.size > 1)
+  }
 }
+
