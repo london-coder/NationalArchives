@@ -37,3 +37,10 @@ The source file and the output file are located relative to the project structur
 src/resources folder. This was, again, to simplify and expedite the solution. The classpath
 could have been searched for the CSV resource, or the location of the data files could be 
 passed into an instance of the application as a parameter. This would be easy to achieve. 
+
+### Supplement
+In the interview, it was asked what would be needed to identify duplicate entries in the 
+source data file. This was added to the code as a unit test, and a single function implementation. 
+The test uses the provided data as having a duplicate entry as identified by the value of the 
+hash. For each duplicate, it was required that the names of the files (column 1 in the data), 
+be presented by their hash value.
