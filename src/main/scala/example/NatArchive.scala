@@ -75,10 +75,8 @@ if(args.length == 4 ) {
     line.toArray
   }
 
-  // case class FileAndHash(f: String, h: String)
-
   def duplicateFiles(data: List[Array[String]]): Map[String, List[String]] = 
-    data.groupBy(_(3)).view.mapValues(_.map(_(0))).toMap.filter(_._2.size > 1)
+    data.groupMap(_(3))(_(0)) filter(_._2.size > 1)
 
 }
 

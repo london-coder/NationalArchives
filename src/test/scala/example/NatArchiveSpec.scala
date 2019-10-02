@@ -46,12 +46,14 @@ class NatArchiveSpec extends FlatSpec with Matchers {
     val dups = NatArchive.duplicateFiles(data)
     dups.size shouldEqual 1
     // visibility of the duplicates
-    dups foreach { x =>
+    displayContent(dups)
+  }
+  def displayContent(data: Map[String, List[String]]): Unit = {
+    data foreach { x =>
       Console.out.println(s"HASH = ${x._1}  ")
       x._2 foreach { y =>
         Console.out.println(s"File Names = $y")
       }
     }
-
   }
 }
