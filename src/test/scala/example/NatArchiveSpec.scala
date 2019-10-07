@@ -1,7 +1,6 @@
 package example
 
 import org.scalatest._
-import scala.io.Source
 import java.security.MessageDigest
 import java.nio.file.{Paths, Files}
 
@@ -10,7 +9,7 @@ class NatArchiveSpec extends FlatSpec with Matchers {
   // reused values
   val fName = "src/resources/data.csv"
 
-  val fileData = NatArchive.dataReader(Source.fromFile(fName))
+  val fileData = NatArchive.dataReader(fName)
 
   "The file reader" should "read in all lines from the file" in {
     fileData.size shouldEqual 5
@@ -21,7 +20,7 @@ class NatArchiveSpec extends FlatSpec with Matchers {
   }
 
   "The original data" should "differ from the corrected data" in {
-    val input = NatArchive.dataReader(Source.fromFile(fName))
+    val input = NatArchive.dataReader(fName)
     val inputStr = input.mkString
     val inputChecksum =
       new String(MessageDigest.getInstance("MD5").digest(inputStr.getBytes))
@@ -42,7 +41,7 @@ class NatArchiveSpec extends FlatSpec with Matchers {
   }
 
   "If there are duplicates" should "return the list of duplicate file names" in {
-    val data = NatArchive.dataReader(Source.fromFile(fName))
+    val data = NatArchive.dataReader(fName)
     val dups = NatArchive.duplicateFiles(data)
     dups.size shouldEqual 1
     // visibility of the duplicates

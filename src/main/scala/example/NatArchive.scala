@@ -1,7 +1,8 @@
 package example
 
-import scala.io.{Source, BufferedSource}
+import scala.io.Source
 import java.io.{PrintWriter, File}
+import java.nio.file.{Files, Paths, StandardCopyOption}
 /*
  * this is the layout of the CSV file, that needs to be input and parsed
  * filename, origin, metadata, hash
@@ -13,17 +14,9 @@ import java.io.{PrintWriter, File}
  */
 
 object NatArchive extends App {
-  /*  Program entry point
-if(args.length == 4 ) {
-  // use the command line parameters to pass to updateRowValues(args(0), args(1),...)
-} else {
-  Console.err.println("Insuffiecient number of parameters...")
-}
-   */
-  def updateRowValues(csvFileName: String, column: String, oldValue: String, newValue: String  ): Unit = {
-    val source = Source.fromFile(csvFileName, "UTF-8")
-    val data = dataReader(source)
-    source.close
+ 
+  def updateRowValues(csvFileName: String, column: String, oldValue: String, newValue: String): Unit = {
+    val data = dataReader(csvFileName)
     val index = columnIndex(data, column)
 
     val out = iterateOverData(data, index, oldValue, newValue)
@@ -34,26 +27,22 @@ if(args.length == 4 ) {
 
     sink.flush
     sink.close
-    // what should happen here, but is not executed, to maintain visibility of the change, is to
-    // rename the 'corrected' file to the original filename e.g.
-    /*
-    val path = Files.move(Paths.get(outputfName), Paths.get(csvFileName), StandardCopyOption.REPLACE_EXISTING)
-    if (path != null)  Console.out.println("Modified file has been renamed.")
-    else Console.err.println("ERROR: failed to rename file $outputfName to $csvFileName")
-   */
+    // renameFile(outputfName, csvFileName)
   }
-
-  def dataReader(source: BufferedSource): List[Array[String]] =
-    for {
-      line <- source.getLines().toList
+  
+  def dataReader(filename: String): List[Array[String]] = {
+    val ds = Source.fromFile(filename, "UTF-8")
+    val data = for {
+      line <- ds.getLines().toList
       values = line.split(",").map(_.trim) // remove leading and trailing whitespace between columns in the CSV file.
     } yield values
-
-  def columnIndex(data: Seq[Array[String]], column: String): Int = {
-    val headers = data.head.zipWithIndex.toMap.withDefaultValue(0)
-    headers(column)
+    ds.close
+    data
   }
-
+  
+  def columnIndex(data: Seq[Array[String]], column: String): Int = 
+    data.head.zipWithIndex.toMap.withDefaultValue(0)(column)
+  
   // not private as its used in a test
   def iterateOverData(data: Seq[Array[String]], index: Int, oldValue: String, newValue: String): Seq[Array[String]] =
     for {
@@ -61,21 +50,21 @@ if(args.length == 4 ) {
     } yield line match {
       case m if m(index).equalsIgnoreCase(oldValue) => swapValues(m, index, newValue)
       case m => m
-    }
-
+  }
+  
   private def dataWriter(out: PrintWriter, data: Seq[Array[String]]): Unit =
     for (l <- data) {
       out.println(l.mkString(", "))
     }
-
+  
   private def swapValues(line: Array[String], index: Int, correct: String): Array[String] = {
     line(index) = correct
     line.toArray
   }
-
+  
   def duplicateFiles(data: List[Array[String]]): Map[String, List[String]] =
     data.groupMap(_(3))(_(0)) filter (_._2.size > 1)
-
+  
   def displayContent(data: Map[String, List[String]]): Unit = {
     data foreach { x =>
       Console.out.println(s"HASH = ${x._1}")
@@ -83,6 +72,12 @@ if(args.length == 4 ) {
         Console.out.println(s"File Names = $y")
       }
     }
+  }
+  
+  def renameFile(outputfName: String, csvFileName: String): Unit = {
+    val path = Files.move(Paths.get(outputfName), Paths.get(csvFileName), StandardCopyOption.REPLACE_EXISTING)
+    if (path != null)  Console.out.println("Modified file has been renamed.")
+    else Console.err.println(s"ERROR: failed to rename file $outputfName to $csvFileName")
   }
 
 }
