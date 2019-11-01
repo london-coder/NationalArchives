@@ -2,3 +2,7 @@ target/
 *original-data.csv
 src/resources/data.csv.modified
 .scalafmt*
+.bloop/
+.metals/
+.vscode/
+project/.bloop/

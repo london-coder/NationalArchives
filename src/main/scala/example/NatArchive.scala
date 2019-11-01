@@ -48,7 +48,7 @@ object NatArchive extends App {
     for {
       line <- data
     } yield line match {
-      case m if m(index).equalsIgnoreCase(oldValue) => swapValues(m, index, newValue)
+      case m if m(index).equalsIgnoreCase(oldValue) => swapValue(m, index, newValue)
       case m => m
   }
   
@@ -57,13 +57,13 @@ object NatArchive extends App {
       out.println(l.mkString(", "))
     }
   
-  private def swapValues(line: Array[String], index: Int, correct: String): Array[String] = {
+  private def swapValue(line: Array[String], index: Int, correct: String): Array[String] = {
     line(index) = correct
     line.toArray
   }
   
-  def duplicateFiles(data: List[Array[String]]): Map[String, List[String]] =
-    data.groupMap(_(3))(_(0)) filter (_._2.size > 1)
+  def duplicateFiles(data: List[Array[String]], groupingColumn: Int, duplicateColumn: Int): Map[String, List[String]] =
+    data.groupMap(_(groupingColumn))(_(duplicateColumn)) filter (_._2.size > 1)
   
   def displayContent(data: Map[String, List[String]]): Unit = {
     data foreach { x =>
